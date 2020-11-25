@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:weekly_report/pages/report_list.dart';
 
-import 'pages/entry_form.dart';
-
-User user;
+import 'app_route.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,19 +11,29 @@ Future<void> main() async {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final credential = await firebaseAuth.signInAnonymously();
   print(credential.user);
-  user = credential.user;
-  runApp(MyApp());
+  runApp(MyApp(
+    user: credential.user,
+  ));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key key, @required this.user})
+      : assert(user != null),
+        super(key: key);
+
+  final User user;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      onGenerateRoute: (RouteSettings routeSettings) {
+        return MaterialPageRoute(builder: (_) => router(routeSettings as AppRoute));
+      },
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: EntryForm(user: user),
+      home: ReportListPage(userId: user.uid),
     );
   }
 }

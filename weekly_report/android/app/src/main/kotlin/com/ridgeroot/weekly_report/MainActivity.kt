@@ -1,4 +1,4 @@
-package com.example.weekly_report
+package com.ridgeroot.weekly_report
 
 import io.flutter.embedding.android.FlutterActivity
 

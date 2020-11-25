@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1040140278231-8i3oulll3tdbkfs009ddpf2cfiq6k8ok.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1040140278231-8i3oulll3tdbkfs009ddpf2cfiq6k8ok</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1040140278231-utej36ni5889vm04ttevbq4nm2jggsji.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDUO58dbCJ_Eg68RJ4Q-JB5p55YPR-9pGI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1040140278231</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ridgeroot.weeklyReport</string>
+	<key>PROJECT_ID</key>
+	<string>weeklyreport-63ab1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>weeklyreport-63ab1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1040140278231:ios:ccf5cd5661cd76b1f05392</string>
+	<key>DATABASE_URL</key>
+	<string>https://weeklyreport-63ab1.firebaseio.com</string>
+</dict>
+</plist>
