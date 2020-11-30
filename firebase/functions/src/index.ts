@@ -34,13 +34,10 @@ const saveLogs = async (userId: string, date: string, data: any) => {
 };
 
 const scrapingQiita = async (qiitaId: string, bearer: string) => {
-    const response = await fetch(`https://qiita.com/api/v2/users/${qiitaId}`, {
-        headers: {
-            'Authorization': `Bearer ${bearer}`
-        }
-    })
+    const response = await fetch(`https://asia-northeast1-posts-index.cloudfunctions.net/v1-qiita?user=${qiitaId}`)
     if (!response.ok) {
-        throw new Error(`${response.status} ${response.statusText}`)
+        functions.logger.error(`${response.status} ${response.statusText}`)
+        return null
     }
     const data = await response.clone().json()
     functions.logger.info(`Qiita Fetch Succeed!`, await response.text())
@@ -48,9 +45,20 @@ const scrapingQiita = async (qiitaId: string, bearer: string) => {
 }
 
 const scrapingNote = async (noteId: string) => {
-    const response = await fetch(`https://note.mu/api/v1/users?urlname=${noteId}`)
+    const response = await fetch(`https://asia-northeast1-posts-index.cloudfunctions.net/v1-note?user=${noteId}`)
     if (!response.ok) {
-        throw new Error(`${response.status} ${response.statusText}`)
+        functions.logger.error(`${response.status} ${response.statusText}`)
+        return null
+    }
+    const data = await response.clone().json()
+    functions.logger.info(`note.mu Fetch Succeed!`, await response.text())
+    return data
+}
+const scrapingZenn = async (zennId: string) => {
+    const response = await fetch(`https://asia-northeast1-posts-index.cloudfunctions.net/v1-zenn?user=${zennId}`)
+    if (!response.ok) {
+        functions.logger.error(`${response.status} ${response.statusText}`)
+        return null
     }
     const data = await response.clone().json()
     functions.logger.info(`note.mu Fetch Succeed!`, await response.text())
@@ -97,16 +105,18 @@ const scraping = async () => {
         const qiitaBearer = user.qiitaBearer
         const noteId = user.noteId
         const twitterId = user.twitterId
+        const zennId = user.zennId
 
         const data = {
             qiita: (qiitaId && qiitaBearer) ? await scrapingQiita(qiitaId, qiitaBearer) : null,
-            note: (noteId) ? (await scrapingNote(noteId))['data'] : null,
+            note: (noteId) ? await scrapingNote(noteId) : null,
             twitter: (twitterId) ? (await scrapingTwitter(twitterId))['data'] : null,
+            zenn: (zennId) ? (await scrapingZenn(zennId)) : null,
         }
 
         const date = dayjs().tz().format('YYYY-MM-DD')
         await saveLogs(snapshot.id, date, data)
-        functions.logger.info(`Save Note! ${snapshot.id}`, { structuredData: true });
+        functions.logger.info(`Save to Firestore! [${date}] uid: ${snapshot.id}`, { structuredData: true });
     })
 }
 
