@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@firebase/testing": "^0.20.11",
+    "@firebase/rules-unit-testing": "^1.1.3",
     "@types/jest": "^26.0.15",
     "firebase-admin": "^9.4.1",
     "firebase-tools": "^8.16.2",

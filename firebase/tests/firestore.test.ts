@@ -1,24 +1,32 @@
-import * as firebase from "@firebase/testing";
-import { FieldValue } from "@google-cloud/firestore";
+import {
+  apps,
+  clearFirestoreData,
+  initializeTestApp,
+  initializeAdminApp,
+  assertFails,
+  assertSucceeds,
+  loadFirestoreRules
+} from "@firebase/rules-unit-testing";
+import type firebase from 'firebase/app'
 import * as fs from "fs";
 
 const PROJECT_ID = "weeklyreport-63ab1";
 const RULES_PATH = "firestore.rules";
 
 // 認証付きのFreistore appを作成する
-const createAuthApp = (auth?: object): firebase.firestore.Firestore => {
-  return firebase.initializeTestApp({ projectId: PROJECT_ID, auth: auth })
+const createAuthApp = (auth?: object) => {
+  return initializeTestApp({ projectId: PROJECT_ID, auth: auth })
     .firestore();
 };
 
-const createUnAuthApp = (): firebase.firestore.Firestore => {
-  return firebase.initializeTestApp({ projectId: PROJECT_ID })
+const createUnAuthApp = () => {
+  return initializeTestApp({ projectId: PROJECT_ID })
     .firestore();
 };
 
 // 管理者権限で操作できるFreistore appを作成する
-const createAdminApp = (): firebase.firestore.Firestore => {
-  return firebase.initializeAdminApp({ projectId: PROJECT_ID }).firestore();
+const createAdminApp = () => {
+  return initializeAdminApp({ projectId: PROJECT_ID }).firestore();
 };
 
 // user情報への参照を作る
@@ -29,7 +37,7 @@ describe("Firestoreセキュリティルール", () => {
   // ルールファイルの読み込み
   beforeAll(async () => {
     const rules = fs.readFileSync(RULES_PATH, "utf8")
-    await firebase.loadFirestoreRules({
+    await loadFirestoreRules({
       projectId: PROJECT_ID,
       rules: rules
     });
@@ -37,34 +45,34 @@ describe("Firestoreセキュリティルール", () => {
 
   // Firestoreデータのクリーンアップ
   afterEach(async () => {
-    await firebase.clearFirestoreData({ projectId: PROJECT_ID });
+    await clearFirestoreData({ projectId: PROJECT_ID });
   });
 
   // Firestoreアプリの削除
   afterAll(async () => {
-    await Promise.all(firebase.apps().map(app => app.delete()));
+    await Promise.all(apps().map(app => app.delete()));
   });
-  
+
   // Authorization
   test("ゲストはusersに書き込めない/読めない", async () => {
     const db = createUnAuthApp()
     const user = usersRef(db).doc("test")
-    await firebase.assertFails(user.set({ name: "太郎" }));
-    await firebase.assertFails(user.get());
+    await assertFails(user.set({ name: "太郎" }));
+    await assertFails(user.get());
   })
 
   test("認証ユーザはusers/${uid}に書き込める/読める", async () => {
     const db = createAuthApp({ uid: "myid" })
     const user = usersRef(db).doc("myid")
-    await firebase.assertSucceeds(user.set(validateUserJSON));
-    await firebase.assertSucceeds(user.get())
+    await assertSucceeds(user.set(validateUserJSON));
+    await assertSucceeds(user.get())
   });
 
   test("認証ユーザはusers/otheridに書き込めない/読めない", async () => {
     const db = createAuthApp({ uid: "myid" })
     const user = usersRef(db).doc("otherid")
-    await firebase.assertFails(user.set(validateUserJSON));
-    await firebase.assertFails(user.get())
+    await assertFails(user.set(validateUserJSON));
+    await assertFails(user.get())
   });
 
   /// users/{userId}/logs のルール
@@ -72,16 +80,16 @@ describe("Firestoreセキュリティルール", () => {
     const uid = "myid"
     const db = createAuthApp({ uid: uid })
     const logs = logsRef(db, uid).doc();
-    await firebase.assertSucceeds(logs.set(validateLogJSON));
-    await firebase.assertSucceeds(logs.get())
+    await assertSucceeds(logs.set(validateLogJSON));
+    await assertSucceeds(logs.get())
   });
 
   test("認証ユーザはusers/otherid/logsに書き込めない/読めない", async () => {
     const uid = "myid"
     const db = createAuthApp({ uid: uid })
     const logs = logsRef(db, "otherid").doc();
-    await firebase.assertFails(logs.set(validateLogJSON));
-    await firebase.assertFails(logs.get())
+    await assertFails(logs.set(validateLogJSON));
+    await assertFails(logs.get())
   });
 
   // Key-Value Validation
@@ -114,27 +122,27 @@ describe("Firestoreセキュリティルール", () => {
   test("認証ユーザはusers/{myid}に書き込み時に特定のキーを書き込める", async () => {
     const db = createAuthApp({ uid: "myid" })
     const user = usersRef(db).doc("myid")
-    await firebase.assertSucceeds(user.set(validateUserJSON));
+    await assertSucceeds(user.set(validateUserJSON));
   });
 
   test("認証ユーザはusers/{myid}に書き込み時に特定のキー以外は書き込めない", async () => {
     const db = createAuthApp({ uid: "myid" })
     const user = usersRef(db).doc("myid")
-    await firebase.assertFails(user.set(invalidJSON));
+    await assertFails(user.set(invalidJSON));
   });
 
   test("認証ユーザはusers/{myid}/logs/{date}に書き込み時に特定のキーを書き込める", async () => {
     const uid = "myid"
-    const db = createAuthApp({ uid: uid})
+    const db = createAuthApp({ uid: uid })
     const user = logsRef(db, uid).doc()
-    await firebase.assertSucceeds(user.set(validateLogJSON));
+    await assertSucceeds(user.set(validateLogJSON));
   });
 
   test("認証ユーザはusers/{myid}/logs/{date}に書き込み時に特定のキー以外は書き込めない", async () => {
     const uid = "myid"
-    const db = createAuthApp({ uid: uid})
+    const db = createAuthApp({ uid: uid })
     const user = logsRef(db, uid).doc()
-    await firebase.assertFails(user.set(invalidateLogJSON));
+    await assertFails(user.set(invalidateLogJSON));
   });
-  
+
 });
