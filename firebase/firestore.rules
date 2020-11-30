@@ -1,9 +1,69 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2020, 11, 16);
+    function isAuthenticated() {
+      return request.auth != null;
     }
+    function isUserAuthenticated(userId) {
+      return request.auth.uid == userId;
+    }
+    function existingData() {
+      return resource.data;
+    }
+    function incomingData() {
+      return request.resource.data;
+    }
+    function isUrl(text) {
+      // https://github.com/google/re2/wiki/Syntax
+      return text is string && text.matches('^http(s?)://[[:graph:]]*$');
+    }
+    function userRef(userId) {
+      return /databases/$(database)/documents/users/$(userId);
+    }
+    function currentUserRef() {
+      return userRef(request.auth.uid);
+    }
+    function affectedKeys() {
+      return incomingData().diff(existingData()).affectedKeys();
+    }
+
+    function validateCreatedAt() {
+      return incomingData().createdAt == request.time;
+    }
+    match /users/{userId} {
+      function isUserSame() {
+        return isUserAuthenticated(userId);
+      }
+
+      function validateKeys(keys) {
+        return keys.size() == 4 &&
+        keys.hasOnly([
+        'qiitaId',
+        'twitterId',
+        'zennId',
+        'noteId',
+        ]);
+      }
+
+      allow get: if isUserSame();
+      allow create, update: if isUserSame() && validateKeys(incomingData().keys());
+
+      match /logs/{date} {
+        function validateKeys(keys) {
+          return keys.size() == 5 &&
+          keys.hasOnly([
+          'qiita',
+          'twitter',
+          'zenn',
+          'note',
+          'createdAt'
+          ]);
+        }
+
+        allow get: if isUserSame();
+        allow create, update: if isUserSame() && validateKeys(incomingData().keys());
+      }
+    }
+
   }
 }

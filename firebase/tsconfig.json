@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "ES2019",
+      "module": "commonjs",
+      "strict": true,
+      "outDir": "lib",
+      "esModuleInterop": true,
+      "sourceMap": true,
+      "types": [
+        "jest",
+        "@types/node"
+      ]
+    },
+    "compileOnSave": true
+  }
+  
