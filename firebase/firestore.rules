@@ -60,7 +60,7 @@ service cloud.firestore {
           ]);
         }
 
-        allow get: if isUserSame();
+        allow get, list: if isUserSame();
         allow create, update: if isUserSame() && validateKeys(incomingData().keys());
       }
     }

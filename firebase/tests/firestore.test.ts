@@ -84,6 +84,13 @@ describe("Firestoreセキュリティルール", () => {
     await assertSucceeds(logs.get())
   });
 
+  test("認証ユーザはusers/myid/logsをリストできる", async () => {
+    const uid = "myid"
+    const db = createAuthApp({ uid: uid })
+    const logs = logsRef(db, uid);
+    await assertSucceeds(logs.get());
+  });
+
   test("認証ユーザはusers/otherid/logsに書き込めない/読めない", async () => {
     const uid = "myid"
     const db = createAuthApp({ uid: uid })
