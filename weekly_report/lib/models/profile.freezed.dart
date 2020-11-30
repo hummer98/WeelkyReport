@@ -21,12 +21,16 @@ class _$ProfileTearOff {
       {@required String id,
       @nullable String noteId,
       @nullable String twitterId,
-      @nullable String qiitaId}) {
+      @nullable String qiitaId,
+      @nullable String zennId,
+      @TimestampConverter() DateTime createdAt}) {
     return _Profile(
       id: id,
       noteId: noteId,
       twitterId: twitterId,
       qiitaId: qiitaId,
+      zennId: zennId,
+      createdAt: createdAt,
     );
   }
 
@@ -49,6 +53,10 @@ mixin _$Profile {
   String get twitterId;
   @nullable
   String get qiitaId;
+  @nullable
+  String get zennId;
+  @TimestampConverter()
+  DateTime get createdAt;
 
   Map<String, dynamic> toJson();
   $ProfileCopyWith<Profile> get copyWith;
@@ -62,7 +70,9 @@ abstract class $ProfileCopyWith<$Res> {
       {String id,
       @nullable String noteId,
       @nullable String twitterId,
-      @nullable String qiitaId});
+      @nullable String qiitaId,
+      @nullable String zennId,
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -79,12 +89,17 @@ class _$ProfileCopyWithImpl<$Res> implements $ProfileCopyWith<$Res> {
     Object noteId = freezed,
     Object twitterId = freezed,
     Object qiitaId = freezed,
+    Object zennId = freezed,
+    Object createdAt = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed ? _value.id : id as String,
       noteId: noteId == freezed ? _value.noteId : noteId as String,
       twitterId: twitterId == freezed ? _value.twitterId : twitterId as String,
       qiitaId: qiitaId == freezed ? _value.qiitaId : qiitaId as String,
+      zennId: zennId == freezed ? _value.zennId : zennId as String,
+      createdAt:
+          createdAt == freezed ? _value.createdAt : createdAt as DateTime,
     ));
   }
 }
@@ -98,7 +113,9 @@ abstract class _$ProfileCopyWith<$Res> implements $ProfileCopyWith<$Res> {
       {String id,
       @nullable String noteId,
       @nullable String twitterId,
-      @nullable String qiitaId});
+      @nullable String qiitaId,
+      @nullable String zennId,
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -116,12 +133,17 @@ class __$ProfileCopyWithImpl<$Res> extends _$ProfileCopyWithImpl<$Res>
     Object noteId = freezed,
     Object twitterId = freezed,
     Object qiitaId = freezed,
+    Object zennId = freezed,
+    Object createdAt = freezed,
   }) {
     return _then(_Profile(
       id: id == freezed ? _value.id : id as String,
       noteId: noteId == freezed ? _value.noteId : noteId as String,
       twitterId: twitterId == freezed ? _value.twitterId : twitterId as String,
       qiitaId: qiitaId == freezed ? _value.qiitaId : qiitaId as String,
+      zennId: zennId == freezed ? _value.zennId : zennId as String,
+      createdAt:
+          createdAt == freezed ? _value.createdAt : createdAt as DateTime,
     ));
   }
 }
@@ -134,7 +156,9 @@ class _$_Profile extends _Profile with DiagnosticableTreeMixin {
       {@required this.id,
       @nullable this.noteId,
       @nullable this.twitterId,
-      @nullable this.qiitaId})
+      @nullable this.qiitaId,
+      @nullable this.zennId,
+      @TimestampConverter() this.createdAt})
       : assert(id != null),
         super._();
 
@@ -152,10 +176,16 @@ class _$_Profile extends _Profile with DiagnosticableTreeMixin {
   @override
   @nullable
   final String qiitaId;
+  @override
+  @nullable
+  final String zennId;
+  @override
+  @TimestampConverter()
+  final DateTime createdAt;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Profile(id: $id, noteId: $noteId, twitterId: $twitterId, qiitaId: $qiitaId)';
+    return 'Profile(id: $id, noteId: $noteId, twitterId: $twitterId, qiitaId: $qiitaId, zennId: $zennId, createdAt: $createdAt)';
   }
 
   @override
@@ -166,7 +196,9 @@ class _$_Profile extends _Profile with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('noteId', noteId))
       ..add(DiagnosticsProperty('twitterId', twitterId))
-      ..add(DiagnosticsProperty('qiitaId', qiitaId));
+      ..add(DiagnosticsProperty('qiitaId', qiitaId))
+      ..add(DiagnosticsProperty('zennId', zennId))
+      ..add(DiagnosticsProperty('createdAt', createdAt));
   }
 
   @override
@@ -181,7 +213,13 @@ class _$_Profile extends _Profile with DiagnosticableTreeMixin {
                 const DeepCollectionEquality()
                     .equals(other.twitterId, twitterId)) &&
             (identical(other.qiitaId, qiitaId) ||
-                const DeepCollectionEquality().equals(other.qiitaId, qiitaId)));
+                const DeepCollectionEquality()
+                    .equals(other.qiitaId, qiitaId)) &&
+            (identical(other.zennId, zennId) ||
+                const DeepCollectionEquality().equals(other.zennId, zennId)) &&
+            (identical(other.createdAt, createdAt) ||
+                const DeepCollectionEquality()
+                    .equals(other.createdAt, createdAt)));
   }
 
   @override
@@ -190,7 +228,9 @@ class _$_Profile extends _Profile with DiagnosticableTreeMixin {
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(noteId) ^
       const DeepCollectionEquality().hash(twitterId) ^
-      const DeepCollectionEquality().hash(qiitaId);
+      const DeepCollectionEquality().hash(qiitaId) ^
+      const DeepCollectionEquality().hash(zennId) ^
+      const DeepCollectionEquality().hash(createdAt);
 
   @override
   _$ProfileCopyWith<_Profile> get copyWith =>
@@ -208,7 +248,9 @@ abstract class _Profile extends Profile {
       {@required String id,
       @nullable String noteId,
       @nullable String twitterId,
-      @nullable String qiitaId}) = _$_Profile;
+      @nullable String qiitaId,
+      @nullable String zennId,
+      @TimestampConverter() DateTime createdAt}) = _$_Profile;
 
   factory _Profile.fromJson(Map<String, dynamic> json) = _$_Profile.fromJson;
 
@@ -223,6 +265,12 @@ abstract class _Profile extends Profile {
   @override
   @nullable
   String get qiitaId;
+  @override
+  @nullable
+  String get zennId;
+  @override
+  @TimestampConverter()
+  DateTime get createdAt;
   @override
   _$ProfileCopyWith<_Profile> get copyWith;
 }

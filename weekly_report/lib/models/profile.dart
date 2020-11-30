@@ -1,10 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'profile.freezed.dart';
 part 'profile.g.dart';
+
+class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
+  const TimestampConverter();
+
+  @override
+  DateTime fromJson(Timestamp json) => json?.toDate();
+
+  @override
+  Timestamp toJson(DateTime object) => object == null ? null : Timestamp.fromDate(object);
+}
 
 @freezed
 abstract class Profile with _$Profile {
@@ -14,6 +24,8 @@ abstract class Profile with _$Profile {
     @nullable String noteId,
     @nullable String twitterId,
     @nullable String qiitaId,
+    @nullable String zennId,
+    @TimestampConverter() DateTime createdAt,
   }) = _Profile;
 
   factory Profile.fromJson(Map<String, dynamic> json) => _$ProfileFromJson(json);

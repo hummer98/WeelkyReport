@@ -12,6 +12,9 @@ _$_Profile _$_$_ProfileFromJson(Map<String, dynamic> json) {
     noteId: json['noteId'] as String,
     twitterId: json['twitterId'] as String,
     qiitaId: json['qiitaId'] as String,
+    zennId: json['zennId'] as String,
+    createdAt:
+        const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
   );
 }
 
@@ -21,4 +24,6 @@ Map<String, dynamic> _$_$_ProfileToJson(_$_Profile instance) =>
       'noteId': instance.noteId,
       'twitterId': instance.twitterId,
       'qiitaId': instance.qiitaId,
+      'zennId': instance.zennId,
+      'createdAt': const TimestampConverter().toJson(instance.createdAt),
     };

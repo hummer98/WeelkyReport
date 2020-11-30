@@ -24,9 +24,9 @@ class _$AppRouteTearOff {
   }
 
 // ignore: unused_element
-  ReportRoute report(String id) {
+  ReportRoute report(Report report) {
     return ReportRoute(
-      id,
+      report,
     );
   }
 }
@@ -41,13 +41,13 @@ mixin _$AppRoute {
   TResult when<TResult extends Object>({
     @required TResult settings(),
     @required TResult top(),
-    @required TResult report(String id),
+    @required TResult report(Report report),
   });
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>({
     TResult settings(),
     TResult top(),
-    TResult report(String id),
+    TResult report(Report report),
     @required TResult orElse(),
   });
   @optionalTypeArgs
@@ -120,7 +120,7 @@ class _$SettingsRoute implements SettingsRoute {
   TResult when<TResult extends Object>({
     @required TResult settings(),
     @required TResult top(),
-    @required TResult report(String id),
+    @required TResult report(Report report),
   }) {
     assert(settings != null);
     assert(top != null);
@@ -133,7 +133,7 @@ class _$SettingsRoute implements SettingsRoute {
   TResult maybeWhen<TResult extends Object>({
     TResult settings(),
     TResult top(),
-    TResult report(String id),
+    TResult report(Report report),
     @required TResult orElse(),
   }) {
     assert(orElse != null);
@@ -214,7 +214,7 @@ class _$TopRoute implements TopRoute {
   TResult when<TResult extends Object>({
     @required TResult settings(),
     @required TResult top(),
-    @required TResult report(String id),
+    @required TResult report(Report report),
   }) {
     assert(settings != null);
     assert(top != null);
@@ -227,7 +227,7 @@ class _$TopRoute implements TopRoute {
   TResult maybeWhen<TResult extends Object>({
     TResult settings(),
     TResult top(),
-    TResult report(String id),
+    TResult report(Report report),
     @required TResult orElse(),
   }) {
     assert(orElse != null);
@@ -275,7 +275,9 @@ abstract class $ReportRouteCopyWith<$Res> {
   factory $ReportRouteCopyWith(
           ReportRoute value, $Res Function(ReportRoute) then) =
       _$ReportRouteCopyWithImpl<$Res>;
-  $Res call({String id});
+  $Res call({Report report});
+
+  $ReportCopyWith<$Res> get report;
 }
 
 /// @nodoc
@@ -290,37 +292,47 @@ class _$ReportRouteCopyWithImpl<$Res> extends _$AppRouteCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object id = freezed,
+    Object report = freezed,
   }) {
     return _then(ReportRoute(
-      id == freezed ? _value.id : id as String,
+      report == freezed ? _value.report : report as Report,
     ));
+  }
+
+  @override
+  $ReportCopyWith<$Res> get report {
+    if (_value.report == null) {
+      return null;
+    }
+    return $ReportCopyWith<$Res>(_value.report, (value) {
+      return _then(_value.copyWith(report: value));
+    });
   }
 }
 
 /// @nodoc
 class _$ReportRoute implements ReportRoute {
-  const _$ReportRoute(this.id) : assert(id != null);
+  const _$ReportRoute(this.report) : assert(report != null);
 
   @override
-  final String id;
+  final Report report;
 
   @override
   String toString() {
-    return 'AppRoute.report(id: $id)';
+    return 'AppRoute.report(report: $report)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is ReportRoute &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)));
+            (identical(other.report, report) ||
+                const DeepCollectionEquality().equals(other.report, report)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(id);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(report);
 
   @override
   $ReportRouteCopyWith<ReportRoute> get copyWith =>
@@ -331,12 +343,12 @@ class _$ReportRoute implements ReportRoute {
   TResult when<TResult extends Object>({
     @required TResult settings(),
     @required TResult top(),
-    @required TResult report(String id),
+    @required TResult report(Report report),
   }) {
     assert(settings != null);
     assert(top != null);
     assert(report != null);
-    return report(id);
+    return report(this.report);
   }
 
   @override
@@ -344,12 +356,12 @@ class _$ReportRoute implements ReportRoute {
   TResult maybeWhen<TResult extends Object>({
     TResult settings(),
     TResult top(),
-    TResult report(String id),
+    TResult report(Report report),
     @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (report != null) {
-      return report(id);
+      return report(this.report);
     }
     return orElse();
   }
@@ -384,8 +396,8 @@ class _$ReportRoute implements ReportRoute {
 }
 
 abstract class ReportRoute implements AppRoute {
-  const factory ReportRoute(String id) = _$ReportRoute;
+  const factory ReportRoute(Report report) = _$ReportRoute;
 
-  String get id;
+  Report get report;
   $ReportRouteCopyWith<ReportRoute> get copyWith;
 }

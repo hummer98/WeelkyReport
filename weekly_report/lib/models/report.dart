@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:weekly_report/models/profile.dart';
 
 part 'report.freezed.dart';
 part 'report.g.dart';
@@ -13,13 +14,19 @@ abstract class Report with _$Report {
     @nullable String id,
 
     /// レコード作成日
-    @required DateTime createdAt,
+    @TimestampConverter() @required DateTime createdAt,
 
-    /// 集計開始日
-    @required DateTime startAt,
+    /// Twitter
+    @nullable Map<String, dynamic> twitter,
 
-    /// 集計最終日(開始日+7day - 1sec)
-    @required DateTime endAt,
+    /// Twitter
+    @nullable Map<String, dynamic> qiita,
+
+    /// Twitter
+    @nullable Map<String, dynamic> zenn,
+
+    /// Twitter
+    @nullable Map<String, dynamic> note,
 
     /// 週報生成日時
     @nullable DateTime lastGeneratedAt,
@@ -38,7 +45,7 @@ abstract class Report with _$Report {
 
   static Stream<List<Report>> stream({@required String userId}) {
     assert(userId != null);
-    return FirebaseFirestore.instance.collection('users/${userId}/reports').snapshots().map((q) => q.docs
+    return FirebaseFirestore.instance.collection('users/${userId}/logs').snapshots().map((q) => q.docs
         .map(
           (d) => Report.fromDocument(d),
         )
